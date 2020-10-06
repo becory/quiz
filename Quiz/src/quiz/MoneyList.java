@@ -33,7 +33,8 @@ Connection conn =new DBConnection().connect();
         tableModel.addColumn("發生時間");
         String sql="SELECT moneyhistory.*, user.user_nickname FROM moneyhistory INNER JOIN user on moneyhistory.user_id=user.user_id Where moneyhistory.user_id='"+myUserid+"'Order by money_date DESC";
         try{
-            PreparedStatement ps=conn.prepareStatement(sql);
+            PreparedStatement ps=conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
             ResultSet rs=ps.executeQuery();
             ResultSetMetaData md = rs.getMetaData();
             if (rs.last()) {

@@ -34,9 +34,11 @@ Connection conn =new DBConnection().connect();
 	tableModel.addColumn("下注金額");
         tableModel.addColumn("結果");
         tableModel.addColumn("發生時間");
-        String sql="SELECT anshistory.*, user.user_nickname,question.* FROM anshistory INNER JOIN user on anshistory.user_id=user.user_id INNER JOIN question on anshistory.qus_id=question.qus_id Where anshistory.user_id='"+myUserid+"' Order by his_date DESC";
         try{
-            PreparedStatement ps=conn.prepareStatement(sql);
+            PreparedStatement ps=conn.prepareStatement("SELECT anshistory.*, user.user_nickname,question.* FROM anshistory INNER JOIN user on anshistory.user_id=user.user_id INNER JOIN question on anshistory.qus_id=question.qus_id Where anshistory.user_id=? Order by his_date DESC",
+                    ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+            ps.setString(1, String.valueOf(myUserid));
             ResultSet rs=ps.executeQuery();
             if (rs.last()) {
             num=rs.getRow();
